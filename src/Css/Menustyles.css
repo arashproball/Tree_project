@@ -1,0 +1,75 @@
+.Menu {
+    position: fixed;
+    left: auto;
+
+    text-align: center;
+    vertical-align: baseline;
+    width: 20%;
+    height: 100VH;
+    display: flex;
+
+}
+
+
+
+.icon {
+    margin-right: 10px;
+    background-color: #f1f1f1;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+
+
+}
+
+.icon:hover {
+    background-color: #084f29;
+    color: white;
+}
+
+.nav {
+
+    min-height: 100%;
+    background-color: #f1f1f1;
+    width: 100%;
+    position: absolute;
+    display: flex;
+
+
+}
+
+.navbar {
+
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    overflow: hidden;
+    pointer-events: auto;
+    top: 0;
+
+    left: auto;
+    right: 0;
+}
+
+.item {
+
+    width: 100%;
+}
+
+.item a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+    width: max-content;
+    width: 100%;
+    margin: 0;
+
+}
+
+.item a:hover {
+    background-color: #084f29;
+    color: white;
+
+}

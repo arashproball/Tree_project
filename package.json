@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^5.16.2",
+    "antd-icons": "^0.1.0-alpha.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dnd": "^16.0.1",

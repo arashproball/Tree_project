@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { IoAdd } from "react-icons/io5";
-
+import { IoArrowBackOutline } from "react-icons/io5";
+import { IoArrowDown } from "react-icons/io5";
+import "../Css/Node.css";
 // Define TreeNode interface
 interface TreeNode {
   id: number;
@@ -13,99 +15,145 @@ interface NodeProps {
   initialList: TreeNode[];
 }
 
-let SelectedText = '';
-let rerenderKey = 0; // Key to trigger re-render
-
+let SelectedText = "";
 function Node({ initialList }: NodeProps) {
   const [list, setList] = useState<TreeNode[]>(initialList);
   const [editingNodeId, setEditingNodeId] = useState<number | null>(null);
-  const [editedText, setEditedText] = useState('');
+  const [editedText, setEditedText] = useState("");
   const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
-  useEffect(() => {
-    // This effect will be called whenever 'list' changes
-    //console.log("List updated:", list);
-  }, [list]);
+  const [rerenderKey, setRerenderKey] = useState<number>(0);
+  useEffect(() => {}, [list]);
 
-
-
-//   const handleDrop = (id: number, level: number) => {
-//     const updatedList = [...list];
-//     const targetNodeIndex = updatedList.findIndex(node => node.id === id);
-//     if (targetNodeIndex === id) {
-//         const newChild: TreeNode = {
-//             id: updatedList[targetNodeIndex].children.length,
-//             text: SelectedText,
-//             level: level+1,
-//             children: []
-//         };
-//         updatedList[targetNodeIndex].children.push(newChild);
-//         setList(updatedList);
-//         rerenderKey += 1; // Trigger re-render
-//         console.log("List updated:", list);
-//     }
-// };
-
-const handleLeftClick = (targetNode:TreeNode) => {
-  const updatedList = [...list];
-    
-    
-        const newChild: TreeNode = {
-            id: targetNode.children.length,
-            text: SelectedText,
-            level: targetNode.level+1,
-            children: []
-        }
-        targetNode.children.push(newChild);
-        setList(updatedList);
-        //rerenderKey += 1; // Trigger re-render
-        console.log("List updated:", list);
-        rerenderKey++;
-    };
-    const handleRightClick = (targetNode: TreeNode) => {
-      const updatedList = [...list];
+  const adddown = (targetNode: TreeNode, text: string) => {
+    setList((prevList) => {
       // Find the index of the target node
-      const targetNodeIndex = updatedList.findIndex(node => node.id === targetNode.id);
+      const targetNodeIndex = prevList.findIndex(
+        (node) => node.id === targetNode.id
+      );
       if (targetNodeIndex !== -1) {
         // Create a new node to be inserted at the same level as the target node
         const newNode: TreeNode = {
-          id: updatedList.length,
-          text: SelectedText,
+          id: prevList.length,
+          text: text,
           level: targetNode.level,
-          children: []
+          children: [],
         };
-        // Insert the new node after the target node
-        updatedList.splice(targetNodeIndex + 1, 0, newNode);
-        setList(updatedList);
-        console.log("List updated:", list);
-        rerenderKey++;
+        // Create a new list with the new node inserted after the target node
+        const updatedList = [
+          ...prevList.slice(0, targetNodeIndex + 1),
+          newNode,
+          ...prevList.slice(targetNodeIndex + 1),
+        ];
+        // Return the updated list
+        return updatedList;
       }
+      // If the target node is not found, return the previous list unchanged
+      initialList = prevList;
+      return prevList;
+    });
+  };
+  const addfront = (targetNode: TreeNode) => {
+    debugger
+    setList((prevList) => {
+      const targetNodeIndex = prevList.findIndex((node) => node.id === targetNode.id);
+      if (targetNodeIndex !== -1) {
+        const newChild = {
+          id: targetNode.children.length,
+          text: "NEW",
+          level: targetNode.level + 1,
+          children: [],
+        };
+        // Update state in an immutable way
+        if(targetNode.children.length>0){
+          alert('این حرکت فقط در Node های پایانی امکان پذیر است');
+          
+        }else{
+        return [
+          ...prevList.slice(0, targetNodeIndex),
+          { ...prevList[targetNodeIndex], children: [...prevList[targetNodeIndex].children, newChild] },
+          ...prevList.slice(targetNodeIndex + 1),
+        ];
+      }
+      }
+      return prevList;
+    });
+    //setRerenderKey(prevkey=>prevkey+1)
+  };
+  
+
+  const handleLeftClick = (targetNode: TreeNode) => {
+    setList((prevList) => {
+      const targetNodeIndex = prevList.findIndex(
+        (node) => node.id === targetNode.id
+      );
+      if (targetNodeIndex !== -1) {
+        const newChild = {
+          id: targetNode.children.length,
+          text: targetNode.text,
+          level: targetNode.level + 1,
+          children: [],
+        };
+        if(targetNode.children.length>0){
+          alert('این حرکت فقط در Node .های پایانی امکان پذیر است');
+          
+        }else{
+        return [
+          ...prevList.slice(0, targetNodeIndex),
+          { ...prevList[targetNodeIndex], children: [...prevList[targetNodeIndex].children, newChild] },
+          ...prevList.slice(targetNodeIndex + 1),
+        ];
+      }}
       
-    };
+      return prevList;
+    });
+    //setRerenderKey((prevkey) => prevkey + 1);
+  };
+
+  const handleRightClick = (targetNode: TreeNode) => {
+    // const newNode: TreeNode = {
+    //   id: list.length,
+    //   text: SelectedText,
+    //   level: targetNode.level,
+    //   children: [],
+    // };
+
+    // const updatedList = [...list];
+    // const targetNodeIndex = updatedList.findIndex((node) => node.id === targetNode.id);
+
+    // if (targetNodeIndex !== -1) {
+    //   const parentNode = list[targetNodeIndex]; // Get the parent node
+
+    //   // If the parent node has no children or it's the selected node, add the new node as its child
+    //   const updatedList = [...list.slice(0, targetNodeIndex + 1), newNode, ...list.slice(targetNodeIndex + 1)];
+
+    //   // Otherwise, insert the new node after the parent node
+
+    //   setList(updatedList);
+    //   console.log(list)
+    // }
+    adddown(targetNode, SelectedText);
+  };
 
   const renderNode = (node: TreeNode) => {
     return (
-      <li
-        className="scroll"
-        key={node.id}
-        draggable={true}
-        
-      >
-        <div 
-          className="Node" 
+      <li className="scroll" key={node.id} draggable={true}>
+        <div
+          className="Node"
           data-level={node.level + 1}
           draggable={true}
           onDragStart={(e) => {
             e.stopPropagation();
             handleDragStart(node);
           }}
-          
-          onDragOver={(e)=>
-            {e.preventDefault();}
-          }
+          onDragOver={(e) => {
+            e.preventDefault();
+          }}
           onDrop={(e) => {
-            e.stopPropagation;
-            e.preventDefault;
-            const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+            e.stopPropagation();
+            e.preventDefault();
+            const rect = (
+              e.currentTarget as HTMLDivElement
+            ).getBoundingClientRect();
             const clickPosition = e.clientX - rect.left;
             const halfWidth = rect.width / 2;
 
@@ -116,7 +164,6 @@ const handleLeftClick = (targetNode:TreeNode) => {
             }
           }}
         >
-          
           <div onDoubleClick={() => handleDoubleClick(node.id, node.text)}>
             {editingNodeId === node.id ? (
               <textarea
@@ -124,13 +171,14 @@ const handleLeftClick = (targetNode:TreeNode) => {
                 onChange={handleChange}
                 autoFocus
                 onBlur={() => handleBlur(node.id)}
-                style={{ width: "100%", height: "60px" }} 
+                style={{ width: "100%", height: "60px" }}
               />
             ) : (
               <span>{node.text}</span>
             )}
           </div>
-          <div className="button"
+          <div
+            className="button"
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -139,14 +187,43 @@ const handleLeftClick = (targetNode:TreeNode) => {
           >
             <IoAdd className="icon" />
           </div>
-          {selectedNodeId === node.id && <><button className="downbutton"><IoAdd className="icon"/></button><button className="frontbutton"><IoAdd className="icon"/></button></>}
+          {selectedNodeId === node.id && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  adddown(node, "NEW");
+                  setSelectedNodeId(
+                    selectedNodeId === node.id ? null : node.id
+                  );
+                }}
+                className="downbutton"
+              >
+                <IoArrowDown className="icon" />
+              </button>
+              {node.children.length===0 &&
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  addfront(node);
+                  setSelectedNodeId(
+                    selectedNodeId === node.id ? null : node.id
+                  );
+                }}
+                className="frontbutton"
+              >
+                <IoArrowBackOutline className="icon" />
+              </button>}
+            </>
+          )}
         </div>
         {node.children && node.children.length > 0 && (
           <div className="children">
             <Node key={rerenderKey} initialList={node.children} />
           </div>
         )}
-        
       </li>
     );
   };
@@ -165,6 +242,7 @@ const handleLeftClick = (targetNode:TreeNode) => {
     });
     setList(updatedList);
     setEditingNodeId(null);
+    setRerenderKey((prevKey) => prevKey + 1);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -176,10 +254,7 @@ const handleLeftClick = (targetNode:TreeNode) => {
     console.log(SelectedText);
   };
 
-
-  return (
-    <ul key={rerenderKey} className="">{list.map(renderNode)}</ul>
-  );
+  return <ul className="" key={rerenderKey}>{list.map(renderNode)}</ul>;
 }
 
 export default Node;

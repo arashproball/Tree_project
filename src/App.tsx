@@ -1,9 +1,10 @@
 import Node from './components/Node';
 import './App.css'
-
+import { Layoute } from "./components/Layoute";
 
 
 function App() {
+  
   const initialList = [
     {
       id: 0,
@@ -59,21 +60,28 @@ function App() {
       text: "Mario José Molina-Pasquel Henríquez",
       level: 0,
       children: []
+    },{
+      id: 2,
+      text: "Mario José Molina-Pasquel Henríquez",
+      level: 0,
+      children: []
     }
   ]
 return(
+  <div className='conteiner'>
+  <Layoute/>
   <div className="TreeView">
     
 
     
       
-    <Node initialList={initialList}/> 
+    <Node initialList={initialList} /> 
     
     {/* <MultiPurposeButton /> Use your compzonent here */}
 
 
     
-  </div>
+  </div></div>
 );
 
 }

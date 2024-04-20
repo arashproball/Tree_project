@@ -1,0 +1,79 @@
+
+.ant-layout .ant-layout-sider{
+    background-color:   #044d22;
+
+}
+
+.sidebar{
+   
+    color: #0d5528;
+    width: 16px;
+    
+}.ant-layout-sider-children{
+    background-color: #1e6145;
+}
+:where(.css-dev-only-do-not-override-1kuana8).ant-menu-dark{
+    background-color:   #1e5215;
+}
+.toggle{
+    color: #fff;
+    margin-right: 50%;
+    transform: translate(50%);
+    height: 50px;
+    font-weight: 900;
+    font-size: 10px !important;
+    width: 100%;
+}
+.toggle :hover{
+    color: #fff;
+    
+    
+}
+:where(.css-dev-only-do-not-override-1kuana8).ant-btn-text:not(:disabled):not(.ant-btn-disabled):hover {
+    color: #fff;
+    
+}
+
+
+:where(.css-dev-only-do-not-override-1qfezbu).ant-menu-dark{
+    background: #1e6145;
+    height: 100%;
+}
+
+    
+    
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    padding: 10px;
+}
+
+.logo-icon{
+    width:40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.88) ;
+
+}
+:where(.css-dev-only-do-not-override-1qfezbu).ant-layout {
+    flex: none;
+}
+.menu-bar-id{
+    min-height: 100lvh;
+    margin-top: 0 ;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    position: relative;
+}
+.App :hover{
+    background-color: #1c5e1b;
+}
