@@ -20,8 +20,7 @@ function Node({ initialList }: NodeProps) {
   const [list, setList] = useState<TreeNode[]>(initialList);
   const [editingNodeId, setEditingNodeId] = useState<number | null>(null);
   const [editedText, setEditedText] = useState('');
-
-
+  const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
   useEffect(() => {
     // This effect will be called whenever 'list' changes
     //console.log("List updated:", list);
@@ -60,6 +59,7 @@ const handleLeftClick = (targetNode:TreeNode) => {
         setList(updatedList);
         //rerenderKey += 1; // Trigger re-render
         console.log("List updated:", list);
+        rerenderKey++;
     };
     const handleRightClick = (targetNode: TreeNode) => {
       const updatedList = [...list];
@@ -77,7 +77,9 @@ const handleLeftClick = (targetNode:TreeNode) => {
         updatedList.splice(targetNodeIndex + 1, 0, newNode);
         setList(updatedList);
         console.log("List updated:", list);
+        rerenderKey++;
       }
+      
     };
 
   const renderNode = (node: TreeNode) => {
@@ -114,6 +116,7 @@ const handleLeftClick = (targetNode:TreeNode) => {
             }
           }}
         >
+          
           <div onDoubleClick={() => handleDoubleClick(node.id, node.text)}>
             {editingNodeId === node.id ? (
               <textarea
@@ -127,13 +130,23 @@ const handleLeftClick = (targetNode:TreeNode) => {
               <span>{node.text}</span>
             )}
           </div>
-          <div className="button"><IoAdd className="icon" /></div>
+          <div className="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setSelectedNodeId(selectedNodeId === node.id ? null : node.id);
+            }}
+          >
+            <IoAdd className="icon" />
+          </div>
+          {selectedNodeId === node.id && <><button className="downbutton"><IoAdd className="icon"/></button><button className="frontbutton"><IoAdd className="icon"/></button></>}
         </div>
         {node.children && node.children.length > 0 && (
           <div className="children">
             <Node key={rerenderKey} initialList={node.children} />
           </div>
         )}
+        
       </li>
     );
   };
